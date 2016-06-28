@@ -1,0 +1,15 @@
+﻿* AIMMS
+* AOA
+* BARON 15
+* CBC 2.9
+* CONOPT 3.14V
+* CPLEX 12.6.3
+* CPOptimizer 12.6.3
+* IPOPT 3.11
+* Knitro 10.0
+* MINOS
+* SNOPT 7.2
+* XA 15
+* NETSOL
+* Environment
+Startup_Case "data\Initial Beer Transport Data.data"
