@@ -1,26 +1,48 @@
 ## ams_version=1.0
 
 Model Main_Beer_Transport {
+    Constraint SupplyRestriction {
+        IndexDomain: p;
+        Definition: sum[ c, Transport(p,c) ] <= Supply(p);
+    }
+    MathematicalProgram LeastCostTransportPlan {
+        Objective: TotalTransportCost;
+        Direction: minimize;
+        Constraints: AllConstraints;
+        Variables: AllVariables;
+        Type: Automatic;
+    }
+    Constraint DemandRequirement {
+        IndexDomain: c;
+        Definition: sum[ p, Transport(p,c) ] >= Demand(c);
+    }
+    Variable TotalTransportCost {
+        Range: free;
+        Definition: sum[ (p,c), UnitTransportCost(p,c) * Transport(p,c) ];
+    }
+    Parameter Demand {
+        IndexDomain: c;
+    }
+    Parameter UnitTransportCost {
+        IndexDomain: (p,c);
+    }
+    Variable Transport {
+        IndexDomain: (p,c);
+        Range: nonnegative;
+    }
+    Parameter Supply {
+        IndexDomain: p;
+    }
+    Set Customers {
+        Index: c;
+    }
+    Set Plants {
+        Index: p;
+    }
     Procedure MainInitialization {
         Comment: "Add initialization statements here that do NOT require any library being initialized already.";
     }
-    Procedure PostMainInitialization {
-        Comment: {
-            "Add initialization statements here that require that the libraries are already initialized properly,
-            or add statements that require the Data Management module to be initialized."
-        }
-    }
     Procedure MainExecution;
-    Procedure PreMainTermination {
-        Body: {
-            return DataManagementExit();
-        }
-        Comment: {
-            "Add termination statements here that require all libraries to be still alive.
-            Return 1 if you allow the termination sequence to continue.
-            Return 0 if you want to cancel the termination sequence."
-        }
-    }
     Procedure MainTermination {
         Body: {
             return 1;
